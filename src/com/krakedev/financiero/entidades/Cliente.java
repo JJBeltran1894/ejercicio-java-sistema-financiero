@@ -10,6 +10,10 @@ public class Cliente {
 		this.nombre = nombre;
 		this.apellido = apellido;
 	}
+	
+	public Cliente() {
+		
+	}
 
 	public String getCedula() {
 		return cedula;
@@ -37,8 +41,8 @@ public class Cliente {
 	
 	public void imprimir() {
 		String mensaje="--- Cliente ---\n Cedula: "+cedula
-				+"\nNombre: "+nombre
-				+"\nApellido: "+apellido;
+				+"\n Nombre: "+nombre
+				+"\n Apellido: "+apellido;
 		System.out.println(mensaje);
 	}
 	
