@@ -49,8 +49,10 @@ public class Banco {
 	public boolean transferir(double monto, Cuenta cuentaOrigen, Cuenta cuentaDestino) {
 		
 		if(monto>0 && cuentaOrigen.getSaldoActual()>=monto && cuentaOrigen.getId()!=cuentaDestino.getId()) {
-
-			return retirar(monto, cuentaOrigen)&&depositar(monto, cuentaDestino);
+			// Como ya validamos todo arriba, ejecutamos las operaciones por separado
+			retirar(monto, cuentaOrigen);
+			depositar(monto, cuentaDestino);
+			return true; // Retornamos true directamente
 		}
 		return false;
 	}

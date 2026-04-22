@@ -16,7 +16,7 @@ public class TestBancoJUnitIA {
     // PRUEBAS NUMERAL 6: crearCuenta
     // ==========================================
     @Test
-    public void testCrearCuentaCodigosConsecutivos() {
+    void testCrearCuentaCodigosConsecutivos() {
         // Validación: Verifica que al crear cuentas, el código inicial sea 1000 y se incremente de forma consecutiva[cite: 205, 206, 207].
         Banco banco = new Banco();
         // Según el PDF, Cliente tiene un constructor que recibe cedula, nombre y apellido [cite: 158]
@@ -38,7 +38,7 @@ public class TestBancoJUnitIA {
     // PRUEBAS NUMERAL 7: depositar
     // ==========================================
     @Test
-    public void testDepositarMontoValido() {
+    void testDepositarMontoValido() {
         // Validación: Verifica que un depósito válido aumente el saldo correctamente[cite: 218].
         Banco banco = new Banco();
         Cuenta cuenta = new Cuenta("1000"); // Según el PDF, la cuenta nace con saldoActual = 0 [cite: 142]
@@ -51,7 +51,7 @@ public class TestBancoJUnitIA {
     }
 
     @Test
-    public void testDepositarMontoInvalido() {
+    void testDepositarMontoInvalido() {
         // Validación: Verifica que no se pueda depositar 0 o un monto negativo[cite: 220].
         Banco banco = new Banco();
         Cuenta cuenta = new Cuenta("1000");
@@ -69,7 +69,7 @@ public class TestBancoJUnitIA {
     // PRUEBAS NUMERAL 8: retirar
     // ==========================================
     @Test
-    public void testRetirarMontoValido() {
+    void testRetirarMontoValido() {
         // Validación: Verifica un retiro exitoso cuando hay saldo suficiente y el monto es válido[cite: 231, 233, 234].
         Banco banco = new Banco();
         Cuenta cuenta = new Cuenta("1000");
@@ -83,7 +83,7 @@ public class TestBancoJUnitIA {
     }
 
     @Test
-    public void testRetirarFondosInsuficientes() {
+    void testRetirarFondosInsuficientes() {
         // Validación: Verifica que no se pueda retirar si el monto supera el saldo disponible[cite: 234].
         Banco banco = new Banco();
         Cuenta cuenta = new Cuenta("1000");
@@ -100,7 +100,7 @@ public class TestBancoJUnitIA {
     // PRUEBAS NUMERAL 9: transferir
     // ==========================================
     @Test
-    public void testTransferirExitoso() {
+    void testTransferirExitoso() {
         // Validación: Verifica que la transferencia reste de origen y sume en destino[cite: 252, 253].
         Banco banco = new Banco();
         Cuenta cuentaOrigen = new Cuenta("1000");
@@ -118,7 +118,7 @@ public class TestBancoJUnitIA {
     }
 
     @Test
-    public void testTransferirFondosInsuficientes() {
+    void testTransferirFondosInsuficientes() {
         // Validación: Verifica que falle la transferencia si el origen no tiene saldo[cite: 260, 261].
         Banco banco = new Banco();
         Cuenta cuentaOrigen = new Cuenta("1000");
@@ -136,7 +136,7 @@ public class TestBancoJUnitIA {
     }
 
     @Test
-    public void testTransferirAMismaCuenta() {
+    void testTransferirAMismaCuenta() {
         // Validación: Según tu lógica en Banco.java, la transferencia falla si cuentaOrigen y cuentaDestino tienen el mismo ID.
         Banco banco = new Banco();
         Cuenta cuenta = new Cuenta("1000");
@@ -148,5 +148,46 @@ public class TestBancoJUnitIA {
         assertFalse(resultado, "La transferencia debe retornar false si se intenta transferir a la misma cuenta.");
         assertEquals(100.0, cuenta.getSaldoActual(), DELTA, "El saldo no debe verse afectado.");
     }
+    
+    @Test
+    void testSetUltimoCodigo() {
+        // Validación: Verifica que el setter de ultimoCodigo funcione correctamente (Cubre la línea roja).
+        Banco banco = new Banco();
+        banco.setUltimoCodigo(5000);
+        assertEquals(5000, banco.getUltimoCodigo(), "El setter debe actualizar el valor de ultimoCodigo.");
+    }
+
+    @Test
+    void testRetirarMontoCeroONegativo() {
+        // Validación: Verifica que no se pueda retirar 0 o un valor negativo (Cubre el rombo amarillo).
+        Banco banco = new Banco();
+        Cuenta cuenta = new Cuenta("1000");
+        cuenta.setSaldoActual(100.0);
+
+        boolean resultadoCero = banco.retirar(0.0, cuenta);
+        boolean resultadoNegativo = banco.retirar(-20.0, cuenta);
+
+        assertFalse(resultadoCero, "Debe retornar false al intentar retirar 0.");
+        assertFalse(resultadoNegativo, "Debe retornar false al intentar retirar un monto negativo.");
+        assertEquals(100.0, cuenta.getSaldoActual(), DELTA, "El saldo no debe modificarse.");
+    }
+    
+    @Test
+    void testTransferirMontoCeroONegativo() {
+        // Validación: Verifica que no se pueda transferir un monto inválido.
+        Banco banco = new Banco();
+        Cuenta cuentaOrigen = new Cuenta("1000");
+        cuentaOrigen.setSaldoActual(100.0);
+        Cuenta cuentaDestino = new Cuenta("1001");
+
+        boolean resultadoCero = banco.transferir(0.0, cuentaOrigen, cuentaDestino);
+        boolean resultadoNegativo = banco.transferir(-10.0, cuentaOrigen, cuentaDestino);
+
+        assertFalse(resultadoCero, "Debe retornar false al transferir 0.");
+        assertFalse(resultadoNegativo, "Debe retornar false al transferir monto negativo.");
+    }
+    
+    
+    
 
 }
